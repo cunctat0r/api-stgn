@@ -6,7 +6,16 @@ class PostsController < ApplicationController
     json_response(@posts)
   end
 
+  def create
+    @post = Post.create!(post_params)
+    json_response(@post, :created)
+  end
+
 private
+  def post_params
+    params.permit(:main_phone_number, :line_name, :num_tower)
+  end
+
   def set_post
     @post = Post.find(params[:id])
   end

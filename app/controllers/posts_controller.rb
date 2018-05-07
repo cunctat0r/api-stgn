@@ -11,6 +11,11 @@ class PostsController < ApplicationController
     json_response(@post, :created)
   end
 
+  def destroy
+    @post.destroy
+    head :no_content
+  end
+
 private
   def post_params
     params.permit(:main_phone_number, :line_name, :num_tower)

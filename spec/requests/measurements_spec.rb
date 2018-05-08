@@ -34,5 +34,34 @@ RSpec.describe 'Measurements API' do
     end
 
   end
+  #
 
+  # GET /posts/:post_id/measurements/:id
+  describe 'GET /posts/:post_id/measurements/:id' do
+    before { get "/posts/#{post_id}/measurements/#{id}" }
+
+    context 'when post exists' do
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+
+      it 'returns the measurement' do
+        expect(json['id']).to eq(id)
+      end
+    end
+
+    context 'when post doesnt exist' do
+      let(:id) { 0 }
+      
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+      
+      it 'returns not found message' do
+        expect(response.body).to match(/Couldn't find Measurement/)
+      end
+      
+    end
+  end
+  #
 end

@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe 'Measurements API' do
   # init test data
-  let!(:post) { create(:post) }
-  let(:post_id) { post.id }
-  let!(:measurements) { create_list(:measurement, 20, post_id: post.id) }
+  let!(:the_post) { create(:post) }
+  let!(:measurements) { create_list(:measurement, 20, post_id: the_post.id) }
+  let(:post_id) { the_post.id }
   let(:id) { measurements.first.id }
 
   # GET /posts/:post_id/measurements
@@ -35,7 +35,6 @@ RSpec.describe 'Measurements API' do
 
   end
   #
-
   # GET /posts/:post_id/measurements/:id
   describe 'GET /posts/:post_id/measurements/:id' do
     before { get "/posts/#{post_id}/measurements/#{id}" }
@@ -64,4 +63,48 @@ RSpec.describe 'Measurements API' do
     end
   end
   #
+  # POST /posts/:post_id/measurements
+  #
+  describe 'POST /posts/post_id/measurements' do
+    let(:vaild_attributes) {{Upit: 12}}
+
+    context 'when request is valid' do
+      before {  post "/posts/#{post_id}/measurements", params: vaild_attributes }
+    
+      it 'returns 201' do
+        expect(response).to have_http_status(201)
+      end
+    end
+    
+    context 'when request is invalid' do
+      before {  post "/posts/#{post_id}/measurements", params: {} }
+    
+      it 'returns 422' do
+        expect(response).to have_http_status(422)
+      end
+    end
+
+  end
+  #
+  describe 'PUT /posts/post_id/measurements/id' do
+    let(:vaild_attributes) {{Upit: 21}}
+
+    before { put "/posts/#{post_id}/measurements/#{id}", params: vaild_attributes  }
+    
+    it 'returns 204' do
+      expect(response).to have_http_status(204)
+    end
+
+    it 'changes post' do
+      updatedMeasurement = Measurement.find(id)
+      expect(updatedMeasurement.Upit).to eq(21)
+    end
+  end
+  #
+  describe 'DELETE /posts/post_id/measurements/id' do
+    it 'returns code 204' do
+      delete "/posts/#{post_id}/measurements/#{id}"
+      expect(response).to have_http_status(204)
+    end
+  end
 end

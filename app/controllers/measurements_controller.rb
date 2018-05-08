@@ -15,6 +15,16 @@ class MeasurementsController < ApplicationController
      json_response(@post, :created)
   end
 
+  def update
+    @measurement.update(measurement_params)
+    head :no_content
+  end
+
+  def destroy
+    @measurement.destroy
+    head :no_content
+  end
+
 private
 
   def measurement_params

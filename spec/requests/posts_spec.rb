@@ -75,4 +75,21 @@ RSpec.describe 'Posts API', type: :request do
     end
   end
 
+  describe 'PUT /posts/id ' do
+    let(:valid_attributes) {{ main_phone_number: "9371234567" }}
+
+    context 'when the record exists' do
+      before {put "/posts/#{post_id}", params: valid_attributes}
+
+      it 'updates the record' do
+        expect(response.body).to be_empty
+      end
+
+      it 'returns code 204' do
+        expect(response).to have_http_status(204)
+      end
+
+    end
+  end
+
 end

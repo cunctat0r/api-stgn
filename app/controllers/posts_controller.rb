@@ -15,6 +15,11 @@ class PostsController < ApplicationController
     json_response(@post, :created)
   end
 
+  def update
+    @post.update(post_params)
+    head :no_content
+  end
+
   def destroy
     @post.destroy
     head :no_content

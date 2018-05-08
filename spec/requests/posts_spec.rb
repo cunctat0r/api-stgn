@@ -21,13 +21,27 @@ RSpec.describe 'Posts API', type: :request do
   describe 'GET /posts/:id' do
     before { get "/posts/#{post_id}" }
 
-    it 'returns post' do
-      expect(json).not_to be_empty
-      expect(json['id']).to eq(post_id)
+    context 'if the record exists' do
+      it 'returns post' do
+        expect(json).not_to be_empty
+        expect(json['id']).to eq(post_id)
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
     end
 
-    it 'returns status code 200' do
-      expect(response).to have_http_status(200)
+    context 'if the record does not exist' do
+      let(:post_id) { 100 }
+
+      it 'returns status 404' do
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns could not find message' do
+        expect(response.body).to match(/Couldn't find Post/)
+      end
     end
   end
 

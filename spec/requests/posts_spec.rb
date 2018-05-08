@@ -4,13 +4,26 @@ RSpec.describe 'Posts API', type: :request do
 
   # initialize test data
   let!(:posts) { create_list(:post, 10) }
-  let(:post_id) { posts.first_id }
+  let(:post_id) { posts.first.id }
 
   describe 'GET /posts' do
     before { get '/posts' }
     it 'returns posts' do
       expect(json).not_to be_empty
       expect(json.size).to eq(10)
+    end
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(200)
+    end
+  end
+
+  describe 'GET /posts/:id' do
+    before { get "/posts/#{post_id}" }
+
+    it 'returns post' do
+      expect(json).not_to be_empty
+      expect(json['id']).to eq(post_id)
     end
 
     it 'returns status code 200' do

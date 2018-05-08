@@ -6,6 +6,10 @@ class PostsController < ApplicationController
     json_response(@posts)
   end
 
+  def show
+    json_response(@post)
+  end
+
   def create
     @post = Post.create!(post_params)
     json_response(@post, :created)

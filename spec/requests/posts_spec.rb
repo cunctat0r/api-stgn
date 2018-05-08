@@ -60,7 +60,18 @@ RSpec.describe 'Posts API', type: :request do
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
       end
+    end
 
+    context 'when the request is invalid' do
+      before {post '/posts', params: { num_line: "121", main_phone_number: "89371234567" } }
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
+      end
+
+      it 'returns message Can"t be blank' do
+        expect(response.body).to match(/can't be blank/)
+      end
     end
   end
 

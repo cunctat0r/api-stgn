@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Posts API', type: :request do
-
   # initialize test data
   let!(:posts) { create_list(:post, 10) }
   let(:post_id) { posts.first.id }
@@ -46,15 +45,19 @@ RSpec.describe 'Posts API', type: :request do
   end
 
   describe 'POST /posts' do
-    let(:valid_attributes) {{main_phone_number: "9372212268", line_name: "Сахалинская №1", num_tower: "192"}}
+    let(:valid_attributes) do
+      { main_phone_number: '9372212268',
+        line_name: 'Сахалинская №1',
+        num_tower: '192' }
+    end
 
     context 'when the request is valid' do
-      before {post '/posts', params: valid_attributes}
+      before { post '/posts', params: valid_attributes }
 
       it 'creates new post' do
-        expect(json['main_phone_number']).to eq("9372212268")
-        expect(json['line_name']).to eq("Сахалинская №1")
-        expect(json['num_tower']).to eq("192")
+        expect(json['main_phone_number']).to eq('9372212268')
+        expect(json['line_name']).to eq('Сахалинская №1')
+        expect(json['num_tower']).to eq('192')
       end
 
       it 'returns status code 201' do
@@ -63,7 +66,11 @@ RSpec.describe 'Posts API', type: :request do
     end
 
     context 'when the request is invalid' do
-      before {post '/posts', params: { num_line: "121", main_phone_number: "89371234567" } }
+      before do
+        post '/posts', params:
+          { num_line: '121',
+            main_phone_number: '89371234567' }
+      end
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -76,10 +83,10 @@ RSpec.describe 'Posts API', type: :request do
   end
 
   describe 'PUT /posts/id ' do
-    let(:valid_attributes) {{ main_phone_number: "9371234567" }}
+    let(:valid_attributes) { { main_phone_number: '9371234567' } }
 
     context 'when the record exists' do
-      before {put "/posts/#{post_id}", params: valid_attributes}
+      before { put "/posts/#{post_id}", params: valid_attributes }
 
       it 'updates the record' do
         expect(response.body).to be_empty
@@ -88,17 +95,14 @@ RSpec.describe 'Posts API', type: :request do
       it 'returns code 204' do
         expect(response).to have_http_status(204)
       end
-
     end
   end
 
   describe 'DELETE /posts/id' do
-    before {delete "/posts/#{post_id}"}
+    before { delete "/posts/#{post_id}" }
 
     it 'returns code 204' do
       expect(response).to have_http_status(204)
     end
-
   end
-
 end

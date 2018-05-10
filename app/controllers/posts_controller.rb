@@ -25,7 +25,8 @@ class PostsController < ApplicationController
     head :no_content
   end
 
-private
+  private
+
   def post_params
     params.permit(:main_phone_number, :line_name, :num_tower)
   end
@@ -33,5 +34,4 @@ private
   def set_post
     @post = Post.find(params[:id])
   end
-
 end

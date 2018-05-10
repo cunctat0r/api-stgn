@@ -9,7 +9,7 @@ RSpec.describe 'Measurements API' do
 
   # GET /posts/:post_id/measurements
   describe 'GET /posts/:post_id/measurements' do
-    before { get "/posts/#{post_id}/measurements" } 
+    before { get "/posts/#{post_id}/measurements" }
 
     context 'when post exists' do
       it 'returns status code 200' do
@@ -32,7 +32,6 @@ RSpec.describe 'Measurements API' do
         expect(response.body).to match(/Couldn't find Post/)
       end
     end
-
   end
   #
   # GET /posts/:post_id/measurements/:id
@@ -51,56 +50,57 @@ RSpec.describe 'Measurements API' do
 
     context 'when post doesnt exist' do
       let(:id) { 0 }
-      
+
       it 'returns status code 404' do
         expect(response).to have_http_status(404)
       end
-      
+
       it 'returns not found message' do
         expect(response.body).to match(/Couldn't find Measurement/)
       end
-      
     end
   end
   #
   # POST /posts/:post_id/measurements
   #
   describe 'POST /posts/post_id/measurements' do
-    let(:vaild_attributes) {{Upit: 12}}
+    let(:vaild_attributes) { { Upit: 12 } }
 
     context 'when request is valid' do
-      before {  post "/posts/#{post_id}/measurements", params: vaild_attributes }
-    
+      before { post "/posts/#{post_id}/measurements", params: vaild_attributes }
+
       it 'returns 201' do
         expect(response).to have_http_status(201)
       end
     end
-    
+
     context 'when request is invalid' do
-      before {  post "/posts/#{post_id}/measurements", params: {} }
-    
+      before { post "/posts/#{post_id}/measurements", params: {} }
+
       it 'returns 422' do
         expect(response).to have_http_status(422)
       end
     end
-
   end
-  #
+  # ===
   describe 'PUT /posts/post_id/measurements/id' do
-    let(:vaild_attributes) {{Upit: 21}}
+    let(:vaild_attributes) { { Upit: 21 } }
 
-    before { put "/posts/#{post_id}/measurements/#{id}", params: vaild_attributes  }
-    
+    before do
+      put "/posts/#{post_id}/measurements/#{id}",
+          params: vaild_attributes
+    end
+
     it 'returns 204' do
       expect(response).to have_http_status(204)
     end
 
     it 'changes post' do
-      updatedMeasurement = Measurement.find(id)
-      expect(updatedMeasurement.Upit).to eq(21)
+      updated_measurement = Measurement.find(id)
+      expect(updated_measurement.Upit).to eq(21)
     end
   end
-  #
+  # ===
   describe 'DELETE /posts/post_id/measurements/id' do
     it 'returns code 204' do
       delete "/posts/#{post_id}/measurements/#{id}"
